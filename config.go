@@ -13,10 +13,14 @@ type Config struct {
 	ServerPort    string
 	CheckInterval time.Duration
 	RetentionDays int
+	Environment   string
 }
 
 // LoadConfig loads configuration from environment variables, providing sensible defaults.
 func LoadConfig() (*Config, error) {
+	// Get the application environment, default to 'development'.
+	env := getEnv("ENVIRONMENT", "development")
+
 	// Get the database path, default to './data.db'.
 	dbPath := getEnv("DB_PATH", "./data.db")
 
@@ -38,6 +42,7 @@ func LoadConfig() (*Config, error) {
 	}
 
 	conf := &Config{
+		Environment:   env,
 		DBPath:        dbPath,
 		ServerPort:    ":" + serverPort,
 		CheckInterval: checkInterval,

@@ -83,10 +83,13 @@ func main() {
 		w.Write([]byte(`{"status": "ok", "service": "guptime-api"}`))
 	})
 
-	// Swagger documentation endpoint.
-	r.Get("/swagger/*", httpSwagger.Handler(
-		httpSwagger.URL("/swagger/doc.json"), //The url pointing to API definition
-	))
+	// Swagger documentation endpoint, only enabled in development.
+	if config.Environment == "development" {
+		log.Println("Registering Swagger documentation endpoint at /swagger/*")
+		r.Get("/swagger/*", httpSwagger.Handler(
+			httpSwagger.URL("/swagger/doc.json"), // The url pointing to API definition
+		))
+	}
 
 	// API version 1 routes.
 	r.Route("/api/v1", func(r chi.Router) {
@@ -124,7 +127,9 @@ func main() {
 
 	// Run the server.
 	log.Printf("API Server is listening on port %s", config.ServerPort)
-	log.Printf("Swagger UI is available at http://localhost%s/swagger/index.html", config.ServerPort)
+	if config.Environment == "development" {
+		log.Printf("Swagger UI is available at http://localhost%s/swagger/index.html", config.ServerPort)
+	}
 	if err := server.ListenAndServe(); err != http.ErrServerClosed {
 		log.Fatalf("Server failed to listen and serve: %v", err)
 	}
