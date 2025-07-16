@@ -1,5 +1,57 @@
-{
-  "example.com": "https://example.com",
-  "google.com": "https://google.com",
-  "github.com": "https://github.com"
-}
+[
+  {
+    "slug": "prod",
+    "name": "example.com",
+    "url": "https://example.com"
+  },
+  {
+    "slug": "prod",
+    "name": "google.com",
+    "url": "https://google.com"
+  },
+  {
+    "slug": "prod",
+    "name": "github.com",
+    "url": "https://github.com"
+  },
+  {
+    "slug": "dev",
+    "name": "example.com",
+    "url": "https://example.com"
+  },
+  {
+    "slug": "dev",
+    "name": "google.com",
+    "url": "https://google.com"
+  },
+  {
+    "slug": "dev",
+    "name": "github.com",
+    "url": "https://github.com"
+  },
+  {
+    "slug": "jh",
+    "name": "SH Latehar",
+    "url": "https://jh-sh-latehar.10bedicu.org"
+  },
+  {
+    "slug": "jh",
+    "name": "SH Gumla",
+    "url": "https://jh-sh-gumla.10bedicu.org"
+  },
+  {
+    "slug": "jh",
+    "name": "SH Khunti",
+    "url": "https://jh-sh-khunti.10bedicu.org"
+  },
+  {
+    "slug": "jh",
+    "name": "SH Chatra",
+    "url": "https://jh-sh-chatra.10bedicu.org"
+  },
+  {
+    "slug": "jh",
+    "name": "SH Ranchi",
+    "url": "https://jh-sh-ranchi.10bedicu.org"
+  }
+]

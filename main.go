@@ -69,6 +69,32 @@ func main() {
 	// --- Setup Chi Router for the API ---
 	r := chi.NewRouter()
 
+	// --- CORS Middleware ---
+	r.Use(func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+			allowed := false
+			origin := req.Header.Get("Origin")
+			for _, h := range config.CORSAllowedHosts {
+				if h == "*" || h == origin {
+					allowed = true
+					break
+				}
+			}
+			if allowed && origin != "" {
+				w.Header().Set("Access-Control-Allow-Origin", origin)
+				w.Header().Set("Vary", "Origin")
+				w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+				w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+				w.Header().Set("Access-Control-Allow-Credentials", "true")
+			}
+			if req.Method == "OPTIONS" {
+				w.WriteHeader(http.StatusNoContent)
+				return
+			}
+			next.ServeHTTP(w, req)
+		})
+	})
+
 	// A good base middleware stack.
 	r.Use(middleware.RequestID)
 	r.Use(middleware.RealIP)

@@ -4,6 +4,8 @@ definitions:
     properties:
       name:
         type: string
+      slug:
+        type: string
       url:
         type: string
     type: object
@@ -56,16 +58,21 @@ paths:
       summary: List all monitors
       tags:
       - monitors
-  /monitors/{monitorID}/checks:
+  /monitors/{slug}/{name}/checks:
     get:
       consumes:
       - application/json
       description: get detailed time-series data for a monitor within a specified
         time range
       parameters:
-      - description: Monitor ID
+      - description: Slug
         in: path
-        name: monitorID
+        name: slug
+        required: true
+        type: string
+      - description: Monitor Name
+        in: path
+        name: name
         required: true
         type: string
       - description: Time range preset (e.g., '1h', '24h', '7d', '30d'). Default is
@@ -105,16 +112,21 @@ paths:
       summary: Get monitor checks
       tags:
       - monitors
-  /monitors/{monitorID}/summary:
+  /monitors/{slug}/{name}/summary:
     get:
       consumes:
       - application/json
       description: get a high-level summary of a single monitor's performance over
         the last 24 hours
       parameters:
-      - description: Monitor ID
+      - description: Slug
         in: path
-        name: monitorID
+        name: slug
+        required: true
+        type: string
+      - description: Monitor Name
+        in: path
+        name: name
         required: true
         type: string
       produces:
@@ -131,6 +143,108 @@ paths:
               type: string
             type: object
       summary: Get a monitor summary
+      tags:
+      - monitors
+  /monitors/slug/{slug}:
+    get:
+      consumes:
+      - application/json
+      description: get a list of all monitors for a given slug
+      parameters:
+      - description: Slug
+        in: path
+        name: slug
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/monitor.Monitor'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List monitors by slug
+      tags:
+      - monitors
+  /monitors/slug/{slug}/checks:
+    get:
+      consumes:
+      - application/json
+      description: get all checks for all monitors under a slug
+      parameters:
+      - description: Slug
+        in: path
+        name: slug
+        required: true
+        type: string
+      - description: Time range preset (e.g., '1h', '24h', '7d', '30d'). Default is
+          '24h'.
+        in: query
+        name: range
+        type: string
+      - description: Start time as a Unix timestamp. Overrides 'range'.
+        in: query
+        name: start_time
+        type: integer
+      - description: End time as a Unix timestamp. Defaults to now.
+        in: query
+        name: end_time
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/monitor.MonitorLogEntry'
+              type: array
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all checks for all monitors under a slug
+      tags:
+      - monitors
+  /monitors/slug/{slug}/summary:
+    get:
+      consumes:
+      - application/json
+      description: get summaries for all monitors under a slug
+      parameters:
+      - description: Slug
+        in: path
+        name: slug
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/monitor.MonitorSummary'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get summaries for all monitors under a slug
       tags:
       - monitors
 swagger: "2.0"
