@@ -1,0 +1,44 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Output of 'go build'
+/guptime
+
+# Test binary, built with `go test -c`
+*.test
+
+# SQLite Database
+/data.db
+/data.db-journal
+
+# Log files
+*.log
+
+# Coverage profiling files
+/coverage.out
+*.cover
+
+# Dependency directory
+/vendor/
+
+# Environment configuration
+.env
+
+# IDE / Editor directories
+/.vscode/
+/.idea/
+*.swp
+*~
+
+# OS-generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

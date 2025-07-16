@@ -1,0 +1,136 @@
+basePath: /api/v1
+definitions:
+  monitor.Monitor:
+    properties:
+      name:
+        type: string
+      url:
+        type: string
+    type: object
+  monitor.MonitorLogEntry:
+    properties:
+      response:
+        type: string
+      time:
+        type: number
+      timestamp:
+        type: integer
+    type: object
+  monitor.MonitorSummary:
+    properties:
+      average_response_time_24h:
+        type: number
+      current_status:
+        type: string
+      uptime_percentage_24h:
+        type: number
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: An API for monitoring website uptime and performance.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: http://swagger.io/terms/
+  title: Guptime API
+  version: "1.0"
+paths:
+  /monitors:
+    get:
+      consumes:
+      - application/json
+      description: get a list of all monitors configured in the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/monitor.Monitor'
+            type: array
+      summary: List all monitors
+      tags:
+      - monitors
+  /monitors/{monitorID}/checks:
+    get:
+      consumes:
+      - application/json
+      description: get detailed time-series data for a monitor within a specified
+        time range
+      parameters:
+      - description: Monitor ID
+        in: path
+        name: monitorID
+        required: true
+        type: string
+      - description: Time range preset (e.g., '1h', '24h', '7d', '30d'). Default is
+          '24h'.
+        in: query
+        name: range
+        type: string
+      - description: Start time as a Unix timestamp. Overrides 'range'.
+        in: query
+        name: start_time
+        type: integer
+      - description: End time as a Unix timestamp. Defaults to now.
+        in: query
+        name: end_time
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/monitor.MonitorLogEntry'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get monitor checks
+      tags:
+      - monitors
+  /monitors/{monitorID}/summary:
+    get:
+      consumes:
+      - application/json
+      description: get a high-level summary of a single monitor's performance over
+        the last 24 hours
+      parameters:
+      - description: Monitor ID
+        in: path
+        name: monitorID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/monitor.MonitorSummary'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a monitor summary
+      tags:
+      - monitors
+swagger: "2.0"
